@@ -10,12 +10,12 @@ app.use(express.json())
 app.use(cors())
 
 // app.use(morgan('tiny'))
-morgan.token('body', (request, response) => JSON.stringify(request.body))
+morgan.token('body', (request) => JSON.stringify(request.body))
 morgan.format('post', ':method :url :status :res[content-length] - :response-time ms :body')
 app.use(morgan('post'))
 
+/*
 let persons = [
-  /*
   {
     name: "Arto Hellas",
     number: "040-123456",
@@ -41,8 +41,8 @@ let persons = [
     number: "123",
     id: 5
   }
-  */
 ]
+*/
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -74,7 +74,7 @@ app.get('/info', (request, response) => {
     <p>Phonebook has info for ${result.length}</p>
     <p>${new Date}</p>
   `
-  response.send(infotext)
+    response.send(infotext)
   })
 })
 
@@ -86,16 +86,16 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
-  .then(person => {
-    if (person) {
-      response.json(person)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 
-  /* 
+  /*
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
 
@@ -109,7 +109,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -157,10 +157,10 @@ app.post('/api/persons', (request, response, next) => {
   })
 
   person.save()
-  .then(savedPerson => {
-    response.json(savedPerson)
-  })
-  .catch(error => next(error))
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch(error => next(error))
   // persons = persons.concat(person)
 })
 
